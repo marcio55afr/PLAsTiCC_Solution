@@ -255,12 +255,12 @@ def Tree_Classifier():
     #     predict_99 *= (1 - predictions.iloc[:, i])
 
     # predictions['class_99'] = predict_99 #resultou em uma prababilidade de proximos a 30%, muito alto precisa ser normalizado
-    predictions['class_99']  = 0.14 * predict_99 / np.mean(predict_99)  #veja no comentário https://www.kaggle.com/ogrellier/plasticc-in-a-kernel-meta-and-data#413383
+    # predictions['class_99']  = 0.14 * predict_99 / np.mean(predict_99)  #veja no comentário https://www.kaggle.com/ogrellier/plasticc-in-a-kernel-meta-and-data#413383
 
 
     #Trotta's aproach
-    # predict_99 = 1 - predictions.max( axis=1 )
-    # predictions['class_99'] = predict_99 #resultou em uma probabilidade de cerca de 40%, também precisa ser normalizado
+    predict_99 = 1 - predictions.max( axis=1 )
+    predictions['class_99'] = predict_99 #resultou em uma probabilidade de cerca de 40%, também precisa ser normalizado
 
     predictions_df = pandas.DataFrame( {'object_id':object_ids,'predictions':predictions} )
     predictions_df.sort_values( by='object_id', inplace=True )
@@ -277,7 +277,7 @@ def Tree_Classifier():
 # Tree_Classifier()
 LightBGM_Classifier_ByPassbands()
 
-def Test_with_train_test_on_TrainingDataSet():
+def DTree_using_TrainingDataSet():
     dataTraining = readDS.getDataTraining_Features_ByPassband()
     print(dataTraining.shape)
 
@@ -289,7 +289,7 @@ def Test_with_train_test_on_TrainingDataSet():
     score_max = 0
 
     # for i in range(100):
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.30, random_state=33)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.975, random_state=33)
 
     model = tree.DecisionTreeClassifier()
     model = model.fit(X_train, Y_train)

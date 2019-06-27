@@ -290,20 +290,31 @@ def DataAnalysisSeparetePassbands():
         plt.close()
 
 #NEED TO GETOUT THE PASSBANDS
-def DataAnalysisInicial():
+def DataAnalysisInitial():
     dataTraining = getDataTrain_MeanFluxes()
-    
-    dataTraining = removeOutLiers_fromColumns( dataTraining )
-    dataTraining = removeOutLiers_fromColumns( dataTraining )
-    dataTraining = removeOutLiers_fromColumns( dataTraining )
-    dataTraining = removeOutLiers_fromColumns( dataTraining )
-    dataTraining = removeOutLiers_fromColumns( dataTraining )
-    dataTraining = removeOutLiers_fromColumns( dataTraining )
-    print(dataTraining.describe()['flux_mean_pass_0'])
-    dataTraining.loc[:,['flux_mean_pass_0']].plot.hist( bins=50, alpha=0.5 )
+    dataTraining.loc[:,['flux_mean']].plot.hist( bins=50, alpha=0.5 )
     # plt.show()
     plt.close()
 
+    #removing outliers
+    fig = getFigure()
+    ax1 = fig.add_subplot( 311, title='Média dos Fluxos de cada objeto' )
+    ax2 = fig.add_subplot( 312, title='Mediana dos Fluxos de cada objeto' )
+    ax3 = fig.add_subplot( 313, title='Desvio Padrão dos Fluxos de cada objeto' )
+
+    dataTraining.loc[ (dataTraining.flux_mean < dataTraining['flux_mean'].quantile( 0.95 )) &
+        (dataTraining.flux_mean > dataTraining['flux_mean'].quantile( 0.05 )),
+    'flux_mean' ].plot.hist( bins=100, alpha=0.8, ax=ax1)
+
+    dataTraining.loc[ (dataTraining.flux_median < dataTraining['flux_median'].quantile( 0.95 )) &
+        (dataTraining.flux_median > dataTraining['flux_median'].quantile( 0.05 )),
+    'flux_median' ].plot.hist( bins=100, alpha=0.8, ax=ax2 )
+
+    dataTraining.loc[ (dataTraining.flux_std < dataTraining['flux_std'].quantile( 0.95 )) &
+        (dataTraining.flux_std > dataTraining['flux_std'].quantile( 0.05 )),
+    'flux_std' ].plot.hist( bins=100, alpha=0.8, ax=ax3 )
+    plt.show()
+    plt.close()
     #Mesmo refazendo esse processo os dados continuam agrupados e aplicar a função de log
     #parece ser a melhor opção, agora comparado a raiz dos fluxos
     #print(dataTraining.describe()['flux_mean_pass_0'])
@@ -572,8 +583,7 @@ def DataAnalysis():
 #Com base nessas análises podemos gerar algumas features diferentes para o classificador
 #como getDataTrain_LogMeanFluxes() além do dataset inicial com as médias.
 
-
-
+DataAnalysisInitial()
 DataAnalysis()
 DataAnalysisSeparetePassbands()
 
