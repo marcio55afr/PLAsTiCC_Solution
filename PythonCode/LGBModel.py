@@ -328,7 +328,6 @@ def DTree_using_TrainingDataSet():
     plt.close()
 
 
-Test_with_train_test_on_TrainingDataSet()
 # dataTest = readDS.getDataTest_FluxMean()
 # print(dataTest.shape)
 # print(dataTest[-100:])
