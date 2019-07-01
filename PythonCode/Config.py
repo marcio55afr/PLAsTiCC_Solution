@@ -6,7 +6,7 @@ import time
 
 M = 1000000
 
-DATA_PATH = "C:/Users/marcio.freitas/Desktop/MonografiaTCC/DataSet/"
+DATA_PATH = "C:/Users/MAFJ/Desktop/MonografiaTCC/DataSet/"
 
 DATA_TYPE = {'object_id': np.int32, 'mjd': np.float32, 'passband': np.int8, 'flux': np.float32, 'flux_err': np.float32, 'detected': np.int8}
 

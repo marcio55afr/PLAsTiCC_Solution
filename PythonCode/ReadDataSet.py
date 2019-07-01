@@ -72,16 +72,5 @@ def getDataTraining_Features_ByPassband2():
 
 df = pandas.DataFrame([])
 
-df.to_csv(DATA_PATH+'predict_passband_set11_214583.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_set1_276425.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set23_175707.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set24_165120.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set25_171448.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set26_166556.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set27_172152.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set28_172152.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set29_173213.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set30_173046.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set31_173046.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set32_165198.csv', mode='w')
-df.to_csv(DATA_PATH+'predict_passband_set33_165231.csv', mode='w')
+# df.to_csv(DATA_PATH+'predict_passband_set11_214583.csv', mode='w')
+# df.to_csv(DATA_PATH+'predict_set1_276425.csv', mode='w')
