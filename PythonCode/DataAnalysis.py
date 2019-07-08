@@ -182,7 +182,7 @@ def DataAnalysisSeparetePassbands():
 
         fig = getFigure()
         fluxMeanPass = 'flux_mean_pass_'+str(i)
-        ax1 = fig.add_subplot(211, title='Histograma no passband '+PASSBANDS[i])
+        ax1 = fig.add_subplot(211, title='Densidade no passband '+PASSBANDS[i])
         k = { 'linewidth' : 3 }
         pandas.DataFrame(
             {  '0': dataTrainingNorm.loc[ dataTrainingNorm.target==0,fluxMeanPass],   '1': dataTrainingNorm.loc[ dataTrainingNorm.target==1,fluxMeanPass],
@@ -211,7 +211,7 @@ def DataAnalysisSeparetePassbands():
             bins=100, histtype='step' ,log=True, color= barColorsReverse, **k, label=range(13,-1,-1)
         )
         ax2.legend(loc="upper right", title="Classes" )
-        # plt.show()
+        plt.show()
         plt.close()
 
     for i in [0,2,5,8,12]:
