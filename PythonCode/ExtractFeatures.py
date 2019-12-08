@@ -15,6 +15,7 @@ def extract_Features(dataSet, metaData):
     aggs = {
         'flux_ratio_sq': [np.sum],
         'flux_by_flux_ratio_sq': [np.sum],
+        'passband': [np.nanmean, np.nanvar, np.nanstd ],
         'flux' : [ np.nanmin, np.nanmax, np.nanmean, np.nanmedian, np.nanvar, np.nanstd ],
         'flux_err' : [ np.nanmin, np.nanmax, np.nanmean, np.nanmedian, np.nanvar, np.nanstd ],
         'mjd' : [ np.nanmin, np.nanmax ],
@@ -27,6 +28,7 @@ def extract_Features(dataSet, metaData):
 
     dataFeatures.columns = [
         "flux_ratio_sq_sum", "flux_by_flux_ratio_sq_sum",
+        "passband_mean", "passband_var","passband_std",
         "flux_min","flux_max","flux_mean","flux_median","flux_var", "flux_std",
         "flux_err_min","flux_err_max","flux_err_mean","flux_err_median","flux_err_var", "flux_err_std",
         "mjd_max", "mjd_min",
