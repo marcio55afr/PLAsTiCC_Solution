@@ -8,7 +8,13 @@ import matplotlib
 
 def extract_Features(dataSet, metaData):
 
+
+    dataSet['flux_ratio_sq'] = np.power(dataSet['flux'] / dataSet['flux_err'], 2.0)
+    dataSet['flux_by_flux_ratio_sq'] = dataSet['flux'] * dataSet['flux_ratio_sq']
+
     aggs = {
+        'flux_ratio_sq': [np.sum],
+        'flux_by_flux_ratio_sq': [np.sum],
         'flux' : [ np.nanmin, np.nanmax, np.nanmean, np.nanmedian, np.nanvar, np.nanstd ],
         'flux_err' : [ np.nanmin, np.nanmax, np.nanmean, np.nanmedian, np.nanvar, np.nanstd ],
         'mjd' : [ np.nanmin, np.nanmax ],
@@ -20,6 +26,7 @@ def extract_Features(dataSet, metaData):
     gc.collect()
 
     dataFeatures.columns = [
+        "flux_ratio_sq_sum", "flux_by_flux_ratio_sq_sum",
         "flux_min","flux_max","flux_mean","flux_median","flux_var", "flux_std",
         "flux_err_min","flux_err_max","flux_err_mean","flux_err_median","flux_err_var", "flux_err_std",
         "mjd_max", "mjd_min",
@@ -28,11 +35,19 @@ def extract_Features(dataSet, metaData):
     dataFeatures['flux_range'] = dataFeatures.flux_max - dataFeatures.flux_min
     dataFeatures['flux_err_range'] = dataFeatures.flux_err_max - dataFeatures.flux_err_min
     dataFeatures['mjd_range'] = dataFeatures.mjd_max - dataFeatures.mjd_min  # De acordo com https://www.kaggle.com/c/PLAsTiCC-2018/discussion/69696 eu removi o max e min do mjd pela amplitude
+    
+    dataFeatures['flux_diff'] = dataFeatures['flux_max'] - dataFeatures['flux_min']
+    dataFeatures['flux_dif2'] = (dataFeatures['flux_max'] - dataFeatures['flux_min']) / dataFeatures['flux_mean']
+    dataFeatures['flux_w_mean'] = dataFeatures['flux_by_flux_ratio_sq_sum'] / dataFeatures['flux_ratio_sq_sum']
+    dataFeatures['flux_dif3'] = (dataFeatures['flux_max'] - dataFeatures['flux_min']) / dataFeatures['flux_w_mean']
+
     dataFeatures.drop(['mjd_max','mjd_max'], axis=1,inplace=True)
+    
+    print(dataFeatures.columns)
 
     if( metaData.index.name != 'object_id' ):
         metaData.set_index('object_id', inplace=True)
-    metaData.drop('hostgal_specz',axis=1, inplace=True)
+    #metaData.drop('hostgal_specz',axis=1, inplace=True)
 
     # check null values on DataFrame
     nan_df = dataFeatures.isnull().sum()
@@ -65,9 +80,9 @@ def extract_DataTraining_Features():
     dataSet = getInitial_DataTraining()
     metaData = getInitial_MetaDataTraining()
     dataTrainingFeatures = extract_Features( dataSet,metaData )
-    dataTrainingFeatures.to_hdf( DATA_PATH + "training_features_set.h5", key = 'features')
+    dataTrainingFeatures.to_hdf( DATA_PATH + "training_features.h5", key = 'features')
     print("\n\n Extract features on training done!")
-    print("\n\nWrote in 'training_features_set.h5' ")
+    print("\n\nWrote in 'training_features.h5' ")
 
 # Precisa separar um modelo para hostgal_specz e hostgal_photoz, este terá apenas o hostgal_photoz
 def extract_DataTest_Features():
@@ -412,3 +427,9 @@ def extract_DataTraining_CountClasses():
     dataSet = dataSet.groupby(['passband','target']).count().unstack(fill_value=0)
 
     return dataSet
+
+
+
+
+
+extract_DataTraining_Features()
